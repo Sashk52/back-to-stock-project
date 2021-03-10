@@ -1,21 +1,27 @@
 package com.example.service;
 
+import com.example.BackToStockService;
 import com.example.Product;
 import com.example.User;
-import com.example.dao.UserDao;
+import com.example.comparator.UserComparator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class EventManager {
-    public static UserDao userDao;
+    private static BackToStockService backToStockService;
+    private static UserComparator userComparator;
 
-    public void subscribe(User user) {
-        userDao.add(user);
-    }
-    public void unsubscribe(User user) {
-        userDao.delete(user);
-    }
-    public void notifyAll(Product product){
-        List<User> allSubscribers = userDao.getAllSurscibers(product);
-        userDao.sendNotificationsToSudcribers(allSubscribers, product);
+    public List<User> notifyAllSubscribers(Product product) {
+        List<User> allSubscribers=Optional.ofNullable(backToStockService.subscribedUsers(product)).get();
+        Collections.sort(allSubscribers, userComparator);
+        for (User eachSortedSubscriber : allSubscribers) {
+            System.out.println("Dear " + eachSortedSubscriber.getName()
+                    + " we happy to inform you, that product "
+                    + product.getId()
+                    + " you subscribed for, is in stock again! Have a nice shopping!");
+        }
+        return allSubscribers;
     }
 }

@@ -8,23 +8,23 @@ import java.util.Set;
 public class BackToStockServiceImpl implements BackToStockService {
     @Override
     public void subscribe(User user, Product product) {
-        if (StorageOne.subscribedUsers.containsKey(user)) {
-            List<Product> productList = StorageOne.subscribedUsers.get(user);
+        if (StorageOne.getSubscribedUsers().containsKey(user)) {
+            List<Product> productList = StorageOne.getSubscribedUsers().get(user);
             productList.add(product);
-            StorageOne.subscribedUsers.put(user, productList);
+            StorageOne.getSubscribedUsers().put(user, productList);
         } else {
             List<Product> singleProductList = new ArrayList<>();
             singleProductList.add(product);
-            StorageOne.subscribedUsers.put(user, singleProductList);
+            StorageOne.getSubscribedUsers().put(user, singleProductList);
         }
     }
 
     @Override
     public List<User> subscribedUsers(Product product) {
-        Set<User> keySet = StorageOne.subscribedUsers.keySet();
+        Set<User> keySet = StorageOne.getSubscribedUsers().keySet();
         List<User> subscribersOfProduct = new ArrayList<>();
         for (User eachKeyUser : keySet) {
-            if (StorageOne.subscribedUsers.get(eachKeyUser).contains(product)) {
+            if (StorageOne.getSubscribedUsers().get(eachKeyUser).contains(product)) {
                 subscribersOfProduct.add(eachKeyUser);
             }
         }
